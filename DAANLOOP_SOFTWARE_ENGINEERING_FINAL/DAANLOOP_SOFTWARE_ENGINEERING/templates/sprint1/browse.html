@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% block title %}Browse Listings{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+<h2 class="section-title mb-0">
+<i class="bi bi-grid-3x3-gap me-2"></i>Browse Items
+<span class="badge bg-primary ms-2 fs-6">{{ total }}</span>
+</h2>
+
+{% if session.get('user_id') %}
+<a href="{{ url_for('sprint1_listings.create') }}" class="btn btn-primary">
+<i class="bi bi-plus-circle me-1"></i> Give Away
+</a>
+{% endif %}
+</div>
+
+<div class="row">
+
+<!-- Filters Sidebar -->
+<div class="col-lg-3 mb-4">
+<div class="filter-card p-3">
+<h5 class="fw-bold mb-3"><i class="bi bi-funnel me-2"></i>Filters</h5>
+
+<form method="GET" action="{{ url_for('sprint1_listings.browse') }}">
+
+<!-- Search -->
+<div class="mb-3">
+<label class="form-label">Search</label>
+<input type="text" class="form-control" name="search" value="{{ search }}" placeholder="Search items...">
+</div>
+
+<!-- Category -->
+<div class="mb-3">
+<label class="form-label">Category</label>
+<select class="form-select" name="category">
+<option value="">All Categories</option>
+{% for cat in all_categories %}
+<option value="{{ cat }}" {% if category == cat %}selected{% endif %}>{{ cat }}</option>
+{% endfor %}
+</select>
+</div>
+
+<!-- City -->
+<div class="mb-3">
+<label class="form-label">City</label>
+<select class="form-select" name="city">
+<option value="">All Cities</option>
+{% for c in cities %}
+<option value="{{ c }}" {% if city == c %}selected{% endif %}>{{ c }}</option>
+{% endfor %}
+</select>
+</div>
+
+<!-- Sort -->
+<div class="mb-3">
+<label class="form-label">Sort By</label>
+<select class="form-select" name="sort">
+<option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest First</option>
+<option value="oldest" {% if sort == 'oldest' %}selected{% endif %}>Oldest First</option>
+</select>
+</div>
+
+<button type="submit" class="btn btn-primary w-100">
+<i class="bi bi-search me-1"></i> Apply Filters
+</button>
+
+{% if search or category or city %}
+<a href="{{ url_for('sprint1_listings.browse') }}" class="btn btn-outline-secondary w-100 mt-2">
+<i class="bi bi-x-circle me-1"></i> Clear
+</a>
+{% endif %}
+
+</form>
+</div>
+</div>
+
+<!-- Listings Grid -->
+<div class="col-lg-9">
+
+{% if search or category or city %}
+<div class="alert alert-info py-2 small">
+<i class="bi bi-info-circle me-1"></i>
+Showing {{ total }} result{{ 's' if total != 1 else '' }}
+{% if search %} for "<strong>{{ search }}</strong>"{% endif %}
+{% if category %} in <strong>{{ category }}</strong>{% endif %}
+{% if city %} from <strong>{{ city }}</strong>{% endif %}
+</div>
+{% endif %}
+
+<div class="row g-4">
+
+{% for listing in listings %}
+<div class="col-md-6 col-xl-4">
+
+<div class="card listing-card h-100">
+
+{% if listing.image_path %}
+<img src="{{ url_for('static', filename=listing.image_path) }}" class="card-img-top" alt="{{ listing.title }}">
+{% else %}
+<div class="img-placeholder">
+<i class="bi bi-image"></i>
+</div>
+{% endif %}
+
+<div class="card-body d-flex flex-column">
+
+<div class="d-flex justify-content-between align-items-start mb-2">
+<span class="category-badge">{{ listing.category }}</span>
+<span class="condition-badge badge bg-light text-dark">{{ listing.condition }}</span>
+</div>
+
+<h5 class="card-title">{{ listing.title }}</h5>
+
+<p class="card-text text-muted small flex-grow-1">
+{{ listing.description[:80] }}{% if listing.description|length > 80 %}...{% endif %}
+</p>
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+<small class="text-muted d-block">
+<i class="bi bi-geo-alt me-1"></i>{{ listing.city }}{% if listing.location %} - {{ listing.location[:25] }}{% if listing.location|length > 25 %}…{% endif %}{% endif %}
+</small>
+
+<small class="text-muted">
+<i class="bi bi-person me-1"></i>{{ listing.owner_name }}
+</small>
+</div>
+
+<a href="{{ url_for('sprint1_listings.view_listing', listing_id=listing.id) }}" class="btn btn-sm btn-primary">
+View <i class="bi bi-arrow-right ms-1"></i>
+</a>
+
+</div>
+</div>
+</div>
+</div>
+{% endfor %}
+
+{% if not listings %}
+<div class="col-12 text-center py-5">
+<i class="bi bi-search display-1 text-muted"></i>
+<h4 class="text-muted mt-3">No items found</h4>
+<p class="text-muted">Try adjusting your filters or search terms.</p>
+</div>
+{% endif %}
+
+</div>
+
+<!-- Pagination -->
+{% if total_pages > 1 %}
+<nav class="mt-4">
+<ul class="pagination justify-content-center">
+
+<li class="page-item {% if page <= 1 %}disabled{% endif %}">
+<a class="page-link" href="?page={{ page-1 }}&search={{ search }}&category={{ category }}&city={{ city }}&sort={{ sort }}">
+<i class="bi bi-chevron-left"></i>
+</a>
+</li>
+
+{% for p in range(1, total_pages + 1) %}
+{% if p == page or p == 1 or p == total_pages or (p >= page - 2 and p <= page + 2) %}
+<li class="page-item {% if p == page %}active{% endif %}">
+<a class="page-link" href="?page={{ p }}&search={{ search }}&category={{ category }}&city={{ city }}&sort={{ sort }}">{{ p }}</a>
+</li>
+{% elif p == page - 3 or p == page + 3 %}
+<li class="page-item disabled"><span class="page-link">...</span></li>
+{% endif %}
+{% endfor %}
+
+<li class="page-item {% if page >= total_pages %}disabled{% endif %}">
+<a class="page-link" href="?page={{ page+1 }}&search={{ search }}&category={{ category }}&city={{ city }}&sort={{ sort }}">
+<i class="bi bi-chevron-right"></i>
+</a>
+</li>
+
+</ul>
+</nav>
+{% endif %}
+
+</div>
+</div>
+
+{% endblock %}

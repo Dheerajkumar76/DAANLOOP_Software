@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}login{% endblock %}
+
+{% block content %}
+<div class="auth-container fade-in-up">
+    <div class="card auth-card">
+        <div class="card-header">
+            <i class="bi bi-box-arrow-in-right display-6 mb-2 d-block"></i>
+            <h3>Welcome Back</h3>
+            <p class="mb-0 opacity-75 small">Login to your DAANLOOP account</p>
+        </div>
+        <div class="card-body p-4">
+            <form method="POST" action="{{ url_for('sprint1_auth.login') }}">
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-semibold">
+                        <i class="bi bi-person me-1"></i>Username
+                    </label>
+                    <input type="text" class="form-control form-control-lg" id="username" name="username" required autofocus placeholder="Enter your username">
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label fw-semibold">
+                        <i class="bi bi-lock me-1"></i>Password
+                    </label>
+                    <input type="password" class="form-control form-control-lg" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                </button>
+            </form>
+            <div class="text-center">
+                <p class="text-muted mb-0">Don't have an account?
+                    <a href="{{ url_for('sprint1_auth.register') }}" class="fw-semibold text-decoration-none">Register here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-3">
+        <small class="text-muted">
+            <i class="bi bi-info-circle me-1"></i>Demo: admin/admin123 or demo/demo123
+        </small>
+    </div>
+</div>
+{% endblock %}

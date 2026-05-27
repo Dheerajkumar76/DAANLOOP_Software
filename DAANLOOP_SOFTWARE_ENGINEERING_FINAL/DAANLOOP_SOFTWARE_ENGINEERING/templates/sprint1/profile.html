@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+
+    <!-- Profile Card -->
+    <div class="col-lg-4">
+        <div class="card text-center p-4">
+            <div class="mx-auto mb-3" style="width: 80px; height: 80px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: 700;">
+                {{ user.username[0]|upper }}
+            </div>
+
+            <h4 class="fw-bold mb-1">{{ user.username }}</h4>
+            <p class="text-muted mb-1"><i class="bi bi-envelope me-1"></i>{{ user.email }}</p>
+            <p class="text-muted mb-2"><i class="bi bi-geo-alt me-1"></i>{{ user.city or 'No city set' }}</p>
+
+            <span class="badge {% if user.role == 'admin' %}bg-danger{% else %}bg-primary{% endif %} mb-3">
+                {{ user.role|upper }}
+            </span>
+
+            <p class="small text-muted">Member since {{ user.created_at }}</p>
+
+            {% if config.SPRINT2 %}
+            <div class="bg-light rounded-3 p-3 mb-3">
+                <div class="star-rating mb-1">
+                    {% for i in range(1, 6) %}
+                        <i class="bi {% if i <= avg_rating|default(0) %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                    {% endfor %}
+                </div>
+                <small class="text-muted">{{ avg_rating|default(0) }}/5 ({{ rating_count|default(0) }} reviews)</small>
+            </div>
+            {% endif %}
+
+            <a href="{{ url_for('sprint1_auth.edit_profile') }}" class="btn btn-outline-primary w-100">
+                <i class="bi bi-pencil me-1"></i> Edit Profile
+            </a>
+        </div>
+    </div>
+
+    <!-- My Listings -->
+    <div class="col-lg-8">
+        <h4 class="section-title mb-4">My Listings ({{ total }})</h4>
+
+        <div class="row g-3">
+            {% for listing in listings %}
+            <div class="col-md-6">
+                <div class="card listing-card h-100">
+
+                    {% if listing.image_path %}
+                    <img src="{{ url_for('static', filename=listing.image_path) }}" class="card-img-top" alt="{{ listing.title }}">
+                    {% else %}
+                    <div class="img-placeholder" style="height: 140px;">
+                        <i class="bi bi-image"></i>
+                    </div>
+                    {% endif %}
+
+                    <div class="card-body">
+                        <span class="category-badge small mb-2 d-inline-block">{{ listing.category }}</span>
+                        <h6 class="fw-bold">{{ listing.title }}</h6>
+
+                        <div class="d-flex justify-content-between">
+                            <small class="text-muted">
+                                <i class="bi bi-geo-alt"></i> {{ listing.city }}
+                            </small>
+                            <a href="{{ url_for('sprint1_listings.view_listing', listing_id=listing.id) }}" class="small">View</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if not listings %}
+            <div class="col-12 text-center py-4">
+                <p class="text-muted">No listings yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

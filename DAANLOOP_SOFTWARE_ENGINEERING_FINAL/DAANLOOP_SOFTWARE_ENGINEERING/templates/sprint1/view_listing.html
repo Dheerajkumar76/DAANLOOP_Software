@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% block title %}{{ listing.title }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('sprint1_listings.browse') }}" class="text-decoration-none">Browse</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('sprint1_listings.browse', category=listing.category) }}" class="text-decoration-none">{{ listing.category }}</a></li>
+        <li class="breadcrumb-item active">{{ listing.title }}</li>
+    </ol>
+</nav>
+
+<div class="row g-4">
+    <!-- Image -->
+    <div class="col-lg-6">
+        <div class="card overflow-hidden">
+            {% if listing.image_path %}
+            <img src="{{ url_for('static', filename=listing.image_path) }}" class="w-100" alt="{{ listing.title }}" style="max-height: 450px; object-fit: cover;">
+            {% else %}
+            <div class="img-placeholder" style="height: 350px;">
+                <i class="bi bi-image display-1"></i>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Details -->
+    <div class="col-lg-6">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <span class="category-badge">{{ listing.category }}</span>
+                    <span class="condition-badge badge bg-success text-white ms-1">{{ listing.condition }}</span>
+                </div>
+                <small class="text-muted">
+                    <i class="bi bi-calendar me-1"></i>{{ listing.created_at }}
+                </small>
+            </div>
+
+            <h2 class="fw-bold mb-3">{{ listing.title }}</h2>
+
+            <div class="mb-2">
+                <i class="bi bi-geo-alt-fill text-primary me-1"></i>
+                <span class="fw-semibold">{{ listing.city }}</span>
+                {% if listing.location %}
+                <span class="text-muted"> - {{ listing.location }}</span>
+                {% endif %}
+            </div>
+
+            {% if listing.contact_number %}
+            <div class="mb-3">
+                {% if session.get('user_id') %}
+                <a href="tel:{{ listing.contact_number }}" class="btn btn-success btn-sm">
+                    <i class="bi bi-telephone-fill me-1"></i> {{ listing.contact_number }}
+                </a>
+                <small class="text-muted ms-2">Call / WhatsApp owner</small>
+                {% else %}
+                <div class="alert alert-info py-2 px-3 d-inline-block mb-0">
+                    <i class="bi bi-lock me-1"></i>
+                    <a href="{{ url_for('sprint1_auth.login') }}" class="fw-semibold">Login</a> to see contact number
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <h6 class="fw-bold text-muted text-uppercase small">Description</h6>
+            <p class="mb-4">{{ listing.description }}</p>
+
+            <!-- Owner Info -->
+            <div class="bg-light rounded-3 p-3 mb-4">
+                <div class="d-flex align-items-center">
+                    <div class="avatar-sm me-3" style="width: 45px; height: 45px; font-size: 1.1rem;">
+                        {{ listing.owner_name[0]|upper }}
+                    </div>
+                    <div>
+                        <h6 class="mb-0 fw-bold">
+                            <a href="{{ url_for('sprint1_auth.public_profile', user_id=listing.owner_id) }}" class="text-decoration-none">
+                                {{ listing.owner_name }}
+                            </a>
+                        </h6>
+                        <small class="text-muted">
+                            <i class="bi bi-geo-alt me-1"></i>{{ listing.owner_city }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex flex-wrap gap-2">
+                {% if session.get('user_id') %}
+                    {% if session.user_id == listing.owner_id or session.get('role') == 'admin' %}
+                    <a href="{{ url_for('sprint1_listings.edit', listing_id=listing.id) }}" class="btn btn-outline-primary">
+                        <i class="bi bi-pencil me-1"></i> Edit
+                    </a>
+
+                    <form action="{{ url_for('sprint1_listings.delete', listing_id=listing.id) }}" method="POST" class="delete-form d-inline">
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class="bi bi-trash me-1"></i> Delete
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    {% if config.SPRINT2 and session.user_id != listing.owner_id %}
+                        <!-- Bookmark -->
+                        {% if is_bookmarked %}
+                        <form action="{{ url_for('sprint2_bookmarks.remove', listing_id=listing.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-bookmark-fill me-1"></i> Saved
+                            </button>
+                        </form>
+                        {% else %}
+                        <form action="{{ url_for('sprint2_bookmarks.add', listing_id=listing.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-outline-warning">
+                                <i class="bi bi-bookmark me-1"></i> Save
+                            </button>
+                        </form>
+                        {% endif %}
+
+                        <!-- Report -->
+                        {% if not has_reported %}
+                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#reportModal">
+                            <i class="bi bi-flag me-1"></i> Report
+                        </button>
+                        {% else %}
+                        <span class="btn btn-outline-secondary btn-sm disabled">
+                            <i class="bi bi-flag-fill me-1"></i> Reported
+                        </span>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if config.SPRINT3 and session.user_id != listing.owner_id %}
+                    <!-- Send Message -->
+                    <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#messageModal">
+                        <i class="bi bi-envelope me-1"></i> Message Owner
+                    </button>
+                    {% endif %}
+
+                {% else %}
+                <a href="{{ url_for('sprint1_auth.login') }}" class="btn btn-primary">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Login to interact
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% if config.SPRINT2 and session.get('user_id') and session.user_id != listing.owner_id %}
+<!-- Report Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="bi bi-flag me-2"></i>Report Listing</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form action="{{ url_for('sprint2_reports.report_listing', listing_id=listing.id) }}" method="POST">
+                <div class="modal-body">
+                    <p class="text-muted">Why are you reporting <strong>{{ listing.title }}</strong>?</p>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Reason</label>
+                        <select class="form-select mb-2" onchange="document.getElementById('reason').value = this.value == 'other' ? '' : this.value">
+                            <option value="">Select a reason...</option>
+                            <option value="Inappropriate content">Inappropriate content</option>
+                            <option value="Spam or misleading">Spam or misleading</option>
+                            <option value="Already claimed/unavailable">Already claimed/unavailable</option>
+                            <option value="Prohibited item">Prohibited item</option>
+                            <option value="Other">Other (specify below)</option>
+                        </select>
+
+                        <textarea class="form-control" id="reason" name="reason" rows="3" placeholder="Describe the issue..." required></textarea>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-flag me-1"></i> Submit Report
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+{% if config.SPRINT3 and session.get('user_id') and session.user_id != listing.owner_id %}
+<!-- Message Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header" style="background: var(--gradient-cool); color: white;">
+                <h5 class="modal-title"><i class="bi bi-envelope me-2"></i>Message Owner</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form action="{{ url_for('sprint3_messages.send', listing_id=listing.id) }}" method="POST">
+                <div class="modal-body">
+
+                    <p class="text-muted mb-3">
+                        Send a message to <strong>{{ listing.owner_name }}</strong> about <strong>{{ listing.title }}</strong>
+                    </p>
+
+                    <label class="form-label fw-semibold">Choose a message:</label>
+
+                    {% for msg in preset_messages %}
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="message_text" id="msg{{ loop.index }}" value="{{ msg }}" required>
+                        <label class="form-check-label" for="msg{{ loop.index }}">
+                            {{ msg }}
+                        </label>
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-info text-white">
+                        <i class="bi bi-send me-1"></i> Send Message
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

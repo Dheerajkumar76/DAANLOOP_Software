@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Create Listing{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+
+            <div class="card-header bg-gradient-primary text-white py-3">
+                <h4 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Give Away an Item</h4>
+            </div>
+
+            <div class="card-body p-4">
+
+                <form method="POST" action="{{ url_for('sprint1_listings.create') }}" enctype="multipart/form-data">
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="title" class="form-label fw-semibold">Item Title *</label>
+                            <input type="text" class="form-control" id="title" name="title"
+                                   value="{{ title|default('') }}" required minlength="3"
+                                   placeholder="e.g., Wooden Bookshelf">
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="condition" class="form-label fw-semibold">Condition</label>
+                            <select class="form-select" id="condition" name="condition">
+                                {% for cond in conditions %}
+                                <option value="{{ cond }}" {% if condition|default('Good') == cond %}selected{% endif %}>{{ cond }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label fw-semibold">Description *</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required
+                                  placeholder="Describe the item, its condition, and any other details...">{{ description|default('') }}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="category" class="form-label fw-semibold">Category *</label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="">Select category...</option>
+                                {% for cat in categories %}
+                                <option value="{{ cat }}" {% if category|default('') == cat %}selected{% endif %}>{{ cat }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="city" class="form-label fw-semibold">City *</label>
+                            <input type="text" class="form-control" id="city" name="city"
+                                   value="{{ city|default('') }}" required placeholder="e.g., Mumbai">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="location" class="form-label fw-semibold">
+                            <i class="bi bi-pin-map me-1"></i>Exact Location / Area
+                        </label>
+                        <input type="text" class="form-control" id="location" name="location"
+                               value="{{ location|default('') }}"
+                               placeholder="e.g., Bandra West, near Carter Road">
+                        <div class="form-text">Helps the recipient know where to pick up.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="contact_number" class="form-label fw-semibold">
+                            <i class="bi bi-telephone me-1"></i>Contact Number
+                        </label>
+                        <input type="tel" class="form-control" id="contact_number" name="contact_number"
+                               value="{{ contact_number|default('') }}"
+                               placeholder="e.g., 9876543210">
+                        <div class="form-text">Visible only to logged-in users.</div>
+                    </div>
+
+                    <label for="imageInput" class="form-label fw-semibold">Photo</label>
+                    <input type="file" class="form-control" id="imageInput" name="image" accept="image/*">
+                    <div class="form-text">Optional. Max 5MB. Supported: JPG, PNG, GIF, WebP</div>
+                    <img id="imagePreview" class="mt-2 rounded" style="display:none; max-height: 200px;">
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle me-2"></i>Create Listing
+                        </button>
+
+                        <a href="{{ url_for('sprint1_listings.browse') }}" class="btn btn-outline-secondary btn-lg">
+                            Cancel
+                        </a>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

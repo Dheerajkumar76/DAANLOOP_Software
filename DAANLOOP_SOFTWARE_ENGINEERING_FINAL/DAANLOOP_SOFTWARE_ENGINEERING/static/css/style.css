@@ -1,0 +1,437 @@
+/* =========================================
+   DAANLOOP - Main Stylesheet
+   Community Item Sharing Platform
+   ========================================= */
+
+:root {
+    --primary: #6C63FF;
+    --primary-dark: #5A52D5;
+    --secondary: #FF6B6B;
+    --accent: #FFC107;
+    --success: #2ECC71;
+    --dark: #2D3436;
+    --light-bg: #F8F9FD;
+    --card-shadow: 0 4px 15px rgba(108, 99, 255, 0.1);
+    --card-hover-shadow: 0 8px 25px rgba(108, 99, 255, 0.2);
+    --gradient-primary: linear-gradient(135deg, #6C63FF 0%, #5A52D5 50%, #4834D4 100%);
+    --gradient-hero: linear-gradient(135deg, #6C63FF 0%, #A855F7 50%, #EC4899 100%);
+    --gradient-warm: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    --gradient-cool: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+    --border-radius: 12px;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--light-bg);
+    color: var(--dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* — Navbar — */
+.bg-gradient-primary {
+    background: var(--gradient-primary) !important;
+}
+
+.brand-text {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.navbar .nav-link {
+    font-weight: 500;
+    padding: 0.5rem 0.8rem !important;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.navbar .nav-link:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.avatar-sm {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+/* — Hero Section — */
+.hero-section {
+    background: var(--gradient-hero);
+    padding: 5rem 0;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 60%;
+    height: 200%;
+    background: rgba(255,255,255,0.05);
+    transform: rotate(15deg);
+    border-radius: 50%;
+}
+
+.hero-section h1 {
+    font-weight: 800;
+    font-size: 3rem;
+    line-height: 1.2;
+}
+
+.hero-section .lead {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+/* — Cards — */
+.card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    box-shadow: var(--card-hover-shadow);
+    transform: translateY(-4px);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.listing-card .card-body {
+    padding: 1.25rem;
+}
+
+.listing-card .card-title {
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+}
+
+.listing-card .badge {
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+/* — Stat Cards / Widgets — */
+.stat-card {
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -20%;
+    width: 120px;
+    height: 120px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+}
+
+.stat-card .stat-icon {
+    font-size: 2.5rem;
+    opacity: 0.3;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+}
+
+.stat-card h3 {
+    font-weight: 800;
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+}
+
+.stat-card p {
+    margin-bottom: 0;
+    opacity: 0.85;
+    font-weight: 500;
+}
+
+.bg-gradient-purple { background: var(--gradient-primary); }
+.bg-gradient-red { background: var(--gradient-warm); }
+.bg-gradient-blue { background: var(--gradient-cool); }
+.bg-gradient-green { background: linear-gradient(135deg, #2ECC71 0%, #27AE60 100%); }
+.bg-gradient-orange { background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%); }
+
+/* — Image Placeholder — */
+.img-placeholder {
+    height: 200px;
+    background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 3rem;
+}
+
+/* — Auth Pages — */
+.auth-container {
+    max-width: 460px;
+    margin: 2rem auto;
+}
+
+.auth-card {
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(108, 99, 255, 0.12);
+}
+
+.auth-card .card-header {
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 16px 16px 0 0 !important;
+    padding: 2rem;
+    text-align: center;
+}
+
+.auth-card .card-header h3 {
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+/* — Buttons — */
+.btn-primary {
+    background: var(--gradient-primary);
+    border: none;
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+}
+
+.btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+/* — Search Bar — */
+.search-bar {
+    background: white;
+    border-radius: 50px;
+    padding: 0.5rem;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+}
+
+.search-bar .form-control {
+    border: none;
+    box-shadow: none;
+    padding-left: 1rem;
+}
+
+.search-bar .btn {
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem;
+}
+
+/* — Filter Sidebar — */
+.filter-card {
+    border-radius: var(--border-radius);
+    background: white;
+    box-shadow: var(--card-shadow);
+}
+
+.filter-card .form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #666;
+}
+
+/* — Ratings — */
+.star-rating {
+    color: #ddd;
+    font-size: 1.3rem;
+}
+
+.star-rating .bi-star-fill {
+    color: var(--accent);
+}
+
+.star-rating-input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.2rem;
+}
+
+.star-rating-input input {
+    display: none;
+}
+
+.star-rating-input label {
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #ddd;
+    transition: color 0.2s;
+}
+
+.star-rating-input label:hover,
+.star-rating-input label:hover ~ label,
+.star-rating-input input:checked ~ label {
+    color: var(--accent);
+}
+
+/* — Footer — */
+.footer-gradient {
+    background: var(--gradient-primary);
+}
+
+/* — Pagination — */
+.pagination .page-link {
+    border: none;
+    color: var(--primary);
+    font-weight: 500;
+    border-radius: 8px !important;
+    margin: 0 2px;
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--primary);
+    color: white;
+}
+
+/* — Feature Tags — */
+.category-badge {
+    background: linear-gradient(135deg, #6C63FF22, #6C63FF11);
+    color: var(--primary);
+    border: 1px solid #6C63FF33;
+    border-radius: 20px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.condition-badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 20px;
+    padding: 0.2rem 0.6rem;
+}
+
+/* — Activity Log — */
+.activity-item {
+    border-left: 3px solid var(--primary);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    background: #FAFBFF;
+    border-radius: 0 8px 8px 0;
+    transition: background 0.2s;
+}
+
+.activity-item:hover {
+    background: #F0F0FF;
+}
+
+/* — Charts Container — */
+.chart-container {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 1.5rem;
+}
+
+/* — Misc — */
+.text-gradient {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.feature-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.section-title {
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 0.75rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+}
+
+/* — Responsive — */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+
+    .hero-section {
+        padding: 3rem 0;
+    }
+
+    .stat-card h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* — Animations — */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.listing-card {
+    animation: fadeInUp 0.4s ease-out;
+}

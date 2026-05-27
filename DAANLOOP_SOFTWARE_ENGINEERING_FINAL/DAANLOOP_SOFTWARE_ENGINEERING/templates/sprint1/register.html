@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="auth-container fade-in-up">
+    <div class="card auth-card">
+        <div class="card-header">
+            <i class="bi bi-person-plus display-6 mb-2 d-block"></i>
+            <h3>Join DaanLoop</h3>
+            <p class="mb-0 opacity-75 small">Create your free account</p>
+        </div>
+        <div class="card-body p-4">
+            <form method="POST" action="{{ url_for('sprint1_auth.register') }}">
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-semibold">
+                        <i class="bi bi-person me-1"></i>Username
+                    </label>
+                    <input type="text" class="form-control" id="username" name="username"
+                        value="{{ username|default('') }}" required minlength="3" placeholder="Choose a username">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-semibold">
+                        <i class="bi bi-envelope me-1"></i>Email
+                    </label>
+                    <input type="email" class="form-control" id="email" name="email"
+                        value="{{ email|default('') }}" required placeholder="your@email.com">
+                </div>
+                <div class="mb-3">
+                    <label for="city" class="form-label fw-semibold">
+                        <i class="bi bi-geo-alt me-1"></i>City
+                    </label>
+                    <input type="text" class="form-control" id="city" name="city"
+                        value="{{ city|default('') }}" placeholder="Your city (optional)">
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="password" class="form-label fw-semibold">
+                            <i class="bi bi-lock me-1"></i>Password
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password" required minlength="6" placeholder="Min 6 chars">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="confirm_password" class="form-label fw-semibold">
+                            <i class="bi bi-lock-fill me-1"></i>Confirm
+                        </label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required placeholder="Repeat password">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                    <i class="bi bi-person-plus me-2"></i>Create Account
+                </button>
+            </form>
+            <div class="text-center">
+                <p class="text-muted mb-0">Already have an account?
+                    <a href="{{ url_for('sprint1_auth.login') }}" class="fw-semibold text-decoration-none">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
